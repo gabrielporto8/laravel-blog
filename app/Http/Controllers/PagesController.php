@@ -3,12 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class PagesController extends Controller
 {
     public function index() {
-        $title = 'Welcome to Laravel!';
-        return view('pages.index')->with('title', $title);
+
+        if(Auth::check()) {
+            $user_id = Auth::id();
+            $user = User::find($user_id);
+            return view('home')->with('posts', $user->posts);
+        } else {
+            $title = 'Welcome to Laravel!';
+            return view('pages.index')->with('title', $title);
+        }
     }
 
     public function about() {
